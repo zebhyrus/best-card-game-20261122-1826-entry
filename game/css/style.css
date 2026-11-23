@@ -1,0 +1,96 @@
+/* Ember Duel — table, cards, overlays. All art is CSS; no images. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: radial-gradient(ellipse at 50% 30%, #1e3a2f 0%, #0d1f18 55%, #08120e 100%);
+  color: #f5efe0; min-height: 100vh;
+}
+#app { max-width: 1280px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+#topbar { display: flex; justify-content: space-between; align-items: center; padding: 14px 22px; }
+.brand { font-size: 22px; letter-spacing: 4px; font-weight: bold; color: #ffb347; }
+#turn-label { font-size: 16px; color: #cfe8d8; background: #00000055; padding: 6px 14px; border-radius: 20px; border: 1px solid #ffffff22; }
+.hidden { display: none !important; }
+
+/* Title */
+.overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: #08120ed9; z-index: 20; }
+.overlay.show { display: flex; }
+.title-card { text-align: center; max-width: 640px; padding: 28px; }
+.title-glyphs { font-size: 34px; letter-spacing: 14px; margin-bottom: 8px; }
+.g.ember { color: #ff6b35; } .g.tide { color: #38bdf8; } .g.gale { color: #a3e635; } .g.stone { color: #fbbf24; }
+.title-card h1 { font-size: 64px; letter-spacing: 8px; color: #ffb347; text-shadow: 0 4px 0 #7c2d12, 0 8px 24px #000; }
+.tagline { font-size: 19px; line-height: 1.5; margin: 14px 0 20px; color: #e8e0c8; }
+.title-cards { display: flex; gap: 14px; justify-content: center; margin-bottom: 22px; }
+.mini-card { width: 130px; padding: 12px 10px; border-radius: 10px; background: #fff8e7; color: #222; border-top: 6px solid #ff6b35; box-shadow: 0 6px 18px #000a; display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.mini-card.tide { border-top-color: #38bdf8; } .mini-card.gale { border-top-color: #a3e635; }
+.mc-cost { align-self: flex-start; background: #1e40af; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.mc-glyph { font-size: 26px; }
+.big-btn { font-family: inherit; font-size: 20px; font-weight: bold; padding: 13px 34px; border-radius: 10px; border: none; cursor: pointer; background: linear-gradient(#fbbf24, #f59e0b); color: #451a03; box-shadow: 0 4px 0 #92400e, 0 8px 20px #000a; transition: transform .12s; }
+.big-btn:hover { transform: translateY(-2px); }
+.big-btn:disabled { opacity: .5; cursor: default; transform: none; }
+.link-btn { display: block; margin: 14px auto 0; background: none; border: none; color: #9fd8b8; font-size: 16px; cursor: pointer; text-decoration: underline; }
+#howto { display: none; text-align: left; background: #ffffff14; border: 1px solid #ffffff22; border-radius: 10px; padding: 14px 18px; margin-top: 14px; line-height: 1.55; font-size: 15px; }
+#howto.show { display: block; }
+.foot { margin-top: 18px; color: #9db8a8; font-size: 13px; }
+
+/* Table */
+#table { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 0 18px 18px; }
+.side { background: #ffffff10; border: 1px solid #ffffff22; border-radius: 14px; padding: 12px 16px; }
+.side-head { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.who { font-size: 19px; font-weight: bold; letter-spacing: 1px; min-width: 130px; }
+.avatar { font-size: 22px; }
+.tag { font-size: 11px; background: #dc2626; color: #fff; padding: 2px 7px; border-radius: 10px; vertical-align: middle; }
+.life-wrap { display: flex; align-items: center; gap: 8px; }
+.life-num { font-size: 34px; font-weight: bold; color: #fff; }
+.life-max { color: #cfe8d8; font-size: 16px; }
+.life-bar { width: 220px; height: 16px; background: #00000066; border-radius: 8px; overflow: hidden; border: 1px solid #ffffff33; }
+.life-bar .fill { height: 100%; width: 100%; background: linear-gradient(90deg, #22c55e, #4ade80); transition: width .45s ease; }
+.life-bar .fill.low { background: linear-gradient(90deg, #dc2626, #f87171); }
+.shield { color: #7dd3fc; font-weight: bold; font-size: 17px; min-width: 46px; }
+.meta { margin-left: auto; color: #cfe8d8; font-size: 15px; }
+.hand { display: flex; gap: 12px; justify-content: center; min-height: 178px; padding: 10px 0 4px; }
+.enemy-hand { min-height: 132px; }
+
+/* Cards */
+.card {
+  --suit: #ff6b35; --suit-dark: #c2410c;
+  width: 138px; height: 178px; flex: 0 0 auto; position: relative;
+  background: linear-gradient(160deg, #fffdf5, #f3e9cf);
+  color: #1f2937; border-radius: 12px; border: 2px solid var(--suit-dark);
+  border-top: 8px solid var(--suit); padding: 10px 10px 8px;
+  box-shadow: 0 6px 16px #000a; cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s;
+  animation: deal-in .35s ease both; animation-delay: calc(var(--i, 0) * 60ms);
+}
+@keyframes deal-in { from { transform: translateY(26px) rotate(-3deg); opacity: 0; } to { transform: translateY(0) rotate(0); opacity: 1; } }
+.card:hover { transform: translateY(-12px) scale(1.04); box-shadow: 0 14px 26px #000c; z-index: 5; }
+.card.dim { opacity: .55; cursor: default; }
+.card.dim:hover { transform: none; box-shadow: 0 6px 16px #000a; }
+.card .cost { position: absolute; top: -11px; left: -8px; width: 30px; height: 30px; border-radius: 50%; background: #1e40af; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: bold; border: 2px solid #fff; }
+.suit-glyph { font-size: 30px; text-align: center; line-height: 1.1; }
+.card-name { font-size: 15px; font-weight: bold; text-align: center; margin-top: 2px; }
+.card-suit { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; text-align: center; color: #6b7280; }
+.card-stats { display: flex; gap: 6px; justify-content: center; margin: 8px 0 6px; font-size: 16px; font-weight: bold; flex-wrap: wrap; }
+.atk { color: #dc2626; } .shd { color: #0369a1; } .heal { color: #15803d; } .drw { color: #7c3aed; }
+.card-text { font-size: 12.5px; line-height: 1.35; text-align: center; color: #374151; }
+.card.back { background: repeating-linear-gradient(45deg, #7c2d12, #7c2d12 10px, #9a3412 10px, #9a3412 20px); border-color: #fbbf24; width: 96px; height: 132px; cursor: default; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: deal-in .35s ease both; }
+.card.back .back-mark { font-size: 30px; color: #fbbf24; }
+.card.back .back-name { color: #fde68a; font-size: 12px; letter-spacing: 2px; text-align: center; }
+
+#mid { text-align: center; padding: 2px 0; }
+#banner { font-size: 17px; color: #fde68a; margin: 4px 0; min-height: 22px; }
+#last-played { min-height: 26px; }
+.last-tag { display: inline-block; background: #00000077; border: 1px solid #fbbf2455; padding: 4px 14px; border-radius: 16px; font-size: 15px; }
+#log { font-size: 13.5px; color: #b8d4c2; line-height: 1.5; min-height: 40px; }
+.actions { display: flex; align-items: center; gap: 16px; justify-content: center; padding-top: 6px; }
+.hint { color: #9db8a8; font-size: 14px; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+.shake { animation: shake .3s ease 2; }
+
+/* End screens */
+.end-card { text-align: center; padding: 34px 44px; border-radius: 18px; background: #12261c; border: 2px solid #fbbf24; box-shadow: 0 20px 60px #000; }
+.end-card.lose { border-color: #64748b; }
+.end-glyph { font-size: 56px; }
+.end-card h1 { font-size: 52px; letter-spacing: 6px; color: #fbbf24; margin: 8px 0; }
+.end-card.lose h1 { color: #94a3b8; }
+.end-card p { font-size: 18px; margin: 8px 0 18px; }
+.end-sub { color: #b8d4c2; font-size: 15px !important; }

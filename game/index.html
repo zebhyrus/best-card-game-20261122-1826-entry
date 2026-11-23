@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ember Duel — a turn-based card duel</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <header id="topbar">
+    <div class="brand">◆ EMBER DUEL</div>
+    <div id="turn-label">Turn 1</div>
+  </header>
+
+  <!-- Title screen -->
+  <section id="title-screen" class="overlay show">
+    <div class="title-card">
+      <div class="title-glyphs"><span class="g ember">▲</span><span class="g tide">●</span><span class="g gale">◆</span><span class="g stone">■</span></div>
+      <h1>EMBER DUEL</h1>
+      <p class="tagline">A turn-based card duel. 30 life. 3 energy a turn.<br>Outplay the rival, card by card.</p>
+      <div class="title-cards">
+        <div class="mini-card ember"><span class="mc-cost">1</span><span class="mc-glyph">▲</span><b>Ember Strike</b><span>⚔ 3</span></div>
+        <div class="mini-card tide"><span class="mc-cost">1</span><span class="mc-glyph">●</span><b>Tide Guard</b><span>🛡 4</span></div>
+        <div class="mini-card gale"><span class="mc-cost">1</span><span class="mc-glyph">◆</span><b>Chain Spark</b><span>⚔ 2+3</span></div>
+      </div>
+      <button id="start-btn" class="big-btn">▶ Start Duel</button>
+      <button id="how-btn" class="link-btn">How to play</button>
+      <div id="howto">
+        <p><b>Goal:</b> reduce the rival from 30 life to 0.</p>
+        <p><b>Each turn:</b> gain 3 energy, draw 1 card. Cards cost energy to play.</p>
+        <p><b>Combos:</b> Chain Spark deals +3 if you already played a card this turn. Shield absorbs damage. Tide Leech heals you.</p>
+        <p><b>Controls:</b> click a card, or press 1–7. Space ends your turn. Enter starts, R restarts.</p>
+      </div>
+      <p class="foot">An original game. No accounts, no network, just cards.</p>
+    </div>
+  </section>
+
+  <!-- The table -->
+  <main id="table" class="hidden">
+    <section id="enemy-panel" class="side enemy">
+      <div class="side-head">
+        <div class="who"><span class="avatar">😈</span> RIVAL <span class="tag">AI</span></div>
+        <div class="life-wrap"><span class="life-num" id="enemy-life">30</span><span class="life-max">/ 30</span>
+          <div class="life-bar"><div id="enemy-life-bar" class="fill"></div></div>
+          <span class="shield" id="enemy-shield"></span></div>
+        <div class="meta"><span id="enemy-energy">Energy 0 / 3</span> · <span id="enemy-deck-count">Deck 20</span></div>
+      </div>
+      <div id="enemy-hand" class="hand enemy-hand"></div>
+    </section>
+
+    <section id="mid">
+      <div id="last-played"></div>
+      <div id="banner">Your turn — play a card or end your turn</div>
+      <div id="log"></div>
+    </section>
+
+    <section id="player-panel" class="side player">
+      <div class="side-head">
+        <div class="who"><span class="avatar">🔥</span> YOU</div>
+        <div class="life-wrap"><span class="life-num" id="player-life">30</span><span class="life-max">/ 30</span>
+          <div class="life-bar"><div id="player-life-bar" class="fill"></div></div>
+          <span class="shield" id="player-shield"></span></div>
+        <div class="meta"><span id="player-energy">Energy 3 / 3</span> · <span id="deck-count">Deck 20</span></div>
+      </div>
+      <div id="player-hand" class="hand"></div>
+      <div class="actions">
+        <button id="end-turn" class="big-btn">End Turn (Space)</button>
+        <span class="hint">Click a card or press 1–7 to play it</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- Win screen -->
+  <section id="win-screen" class="overlay end">
+    <div class="end-card win">
+      <div class="end-glyph">🏆</div>
+      <h1>VICTORY!</h1>
+      <p id="win-stats"></p>
+      <p class="end-sub">The rival's ember is out. You win the duel.</p>
+      <button id="again-win" class="big-btn">Play Again (R)</button>
+    </div>
+  </section>
+
+  <!-- Loss screen -->
+  <section id="lose-screen" class="overlay end">
+    <div class="end-card lose">
+      <div class="end-glyph">💀</div>
+      <h1>DEFEAT</h1>
+      <p id="lose-stats"></p>
+      <p class="end-sub">Your ember is out — but a rematch is one click away.</p>
+      <button id="again-lose" class="big-btn">Rematch (R)</button>
+    </div>
+  </section>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
